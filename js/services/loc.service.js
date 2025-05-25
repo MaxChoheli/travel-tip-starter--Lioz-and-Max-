@@ -30,7 +30,8 @@ export const locService = {
     save,
     setFilterBy,
     setSortBy,
-    getLocCountByRateMap
+    getLocCountByRateMap,
+    getLocCountByUpdateGroup
 }
 
 function query() {
@@ -38,7 +39,9 @@ function query() {
         .then(locs => {
             if (gFilterBy.txt) {
                 const regex = new RegExp(gFilterBy.txt, 'i')
-                locs = locs.filter(loc => regex.test(loc.name))
+                locs = locs.filter(loc =>
+                    regex.test(loc.name) || regex.test(loc.geo?.address || '')
+                )
             }
             if (gFilterBy.minRate) {
                 locs = locs.filter(loc => loc.rate >= gFilterBy.minRate)
@@ -100,6 +103,28 @@ function getLocCountByRateMap() {
         })
 }
 
+function getLocCountByUpdateGroup() {
+    return storageService.query(DB_KEY).then(locs => {
+        const now = Date.now()
+        const DAY = 1000 * 60 * 60 * 24
+
+        const map = { today: 0, past: 0, never: 0 }
+
+        locs.forEach(loc => {
+            if (loc.createdAt === loc.updatedAt) {
+                map.never++
+            } else if (now - loc.updatedAt < DAY) {
+                map.today++
+            } else {
+                map.past++
+            }
+        })
+
+        map.total = locs.length
+        return map
+    })
+}
+
 function setSortBy(sortBy = {}) {
     gSortBy = sortBy
 }
@@ -156,7 +181,6 @@ function _createLoc(loc) {
     return loc
 }
 
-
 // unused functions
 // function getEmptyLoc(name = '') {
 //     return {
@@ -173,4 +197,3 @@ function _createLoc(loc) {
 //         }
 //     }
 // }
-

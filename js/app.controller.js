@@ -4,6 +4,8 @@ import { mapService } from './services/map.service.js'
 
 window.onload = onInit
 
+var gUserPos = null
+
 // To make things easier in this project structure 
 // functions that are called from DOM are defined on a global app object
 window.app = {
@@ -44,11 +46,12 @@ function renderLocs(locs) {
                 <span title="${loc.rate} stars">${'★'.repeat(loc.rate)}</span>
             </h4>
             <p class="muted">
-                Created: ${utilService.elapsedTime(loc.createdAt)}
-                ${(loc.createdAt !== loc.updatedAt) ?
-                ` | Updated: ${utilService.elapsedTime(loc.updatedAt)}`
-                : ''}
-            </p>
+    Created: ${utilService.elapsedTime(loc.createdAt)}
+    ${(loc.createdAt !== loc.updatedAt) ?
+                ` | Updated: ${utilService.elapsedTime(loc.updatedAt)}` : ''}
+    ${(gUserPos) ? ` | 📏 ${utilService.getDistance(gUserPos, loc.geo, 'K')} km` : ''}
+</p>
+
             <div class="loc-btns">     
                <button title="Delete" onclick="app.onRemoveLoc('${loc.id}')">🗑️</button>
                <button title="Edit" onclick="app.onUpdateLoc('${loc.id}')">✏️</button>
@@ -131,6 +134,7 @@ function loadAndRenderLocs() {
 function onPanToUserPos() {
     mapService.getUserPosition()
         .then(latLng => {
+            gUserPos = latLng
             mapService.panTo({ ...latLng, zoom: 15 })
             unDisplayLoc()
             loadAndRenderLocs()
@@ -141,6 +145,7 @@ function onPanToUserPos() {
             flashMsg('Cannot get your position')
         })
 }
+
 
 function onUpdateLoc(locId) {
     locService.getById(locId)
@@ -185,11 +190,22 @@ function displayLoc(loc) {
     el.querySelector('[name=loc-copier]').value = window.location
     el.classList.add('show')
 
+    if (gUserPos) {
+        const distance = utilService.getDistance(gUserPos, loc.geo, 'K')
+        const el = document.querySelector('.selected-loc')
+        const distEl = document.createElement('p')
+        distEl.classList.add('muted')
+        distEl.innerText = `📏 Distance: ${distance} km`
+        el.append(distEl)
+    }
+
+
     utilService.updateQueryParams({ locId: loc.id })
 }
 
 function unDisplayLoc() {
     utilService.updateQueryParams({ locId: '' })
+    document.querySelectorAll('.selected-loc p.muted').forEach(p => p.remove())
     document.querySelector('.selected-loc').classList.remove('show')
     mapService.setMarker(null)
 }
@@ -267,7 +283,12 @@ function renderLocStats() {
     locService.getLocCountByRateMap().then(stats => {
         handleStats(stats, 'loc-stats-rate')
     })
+
+    locService.getLocCountByUpdateGroup().then(stats => {
+        handleStats(stats, 'loc-stats-update')
+    })
 }
+
 
 function handleStats(stats, selector) {
     // stats = { low: 37, medium: 11, high: 100, total: 148 }

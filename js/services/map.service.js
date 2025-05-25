@@ -9,7 +9,7 @@ export const mapService = {
 }
 
 // TODO: Enter your API Key
-const API_KEY = ''
+const API_KEY = 'AIzaSyA0iCuuA8Ye5nlzm1lJWqcgBxgbi4IFP4I'
 var gMap
 var gMarker
 
@@ -24,7 +24,7 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
         })
 }
 
-function panTo({lat, lng, zoom=15}) {
+function panTo({ lat, lng, zoom = 15 }) {
     const laLatLng = new google.maps.LatLng(lat, lng)
     gMap.panTo(laLatLng)
     gMap.setZoom(zoom)
@@ -45,7 +45,7 @@ function lookupAddressGeo(geoOrAddress) {
             // console.log('RES IS', res)
             if (!res.results.length) return new Error('Found nothing')
             res = res.results[0]
-            const {formatted_address, geometry} = res
+            const { formatted_address, geometry } = res
 
             const geo = {
                 address: formatted_address.substring(formatted_address.indexOf(' ')).trim(),
