@@ -69,6 +69,9 @@ function renderLocs(locs) {
 }
 
 function onRemoveLoc(locId) {
+    const isConfirmed = confirm('Are you sure you want to remove this location?')
+    if (!isConfirmed) return
+
     locService.remove(locId)
         .then(() => {
             flashMsg('Location removed')
@@ -80,6 +83,7 @@ function onRemoveLoc(locId) {
             flashMsg('Cannot remove location')
         })
 }
+
 
 function onSearchAddress(ev) {
     ev.preventDefault()
@@ -223,7 +227,7 @@ function getFilterByFromQueryParams() {
     const queryParams = new URLSearchParams(window.location.search)
     const txt = queryParams.get('txt') || ''
     const minRate = queryParams.get('minRate') || 0
-    locService.setFilterBy({txt, minRate})
+    locService.setFilterBy({ txt, minRate })
 
     document.querySelector('input[name="filter-by-txt"]').value = txt
     document.querySelector('input[name="filter-by-rate"]').value = minRate
