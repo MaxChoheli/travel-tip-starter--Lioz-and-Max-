@@ -73,6 +73,15 @@
                 </section>
             </section>
         </div>
+        <dialog class="edit-loc-modal">
+            <form onsubmit="app.onSaveChanges()" method="dialog">
+                <h2>Add Location</h2>
+                <input class="new-loc-name" type="text" placeholder="Location Name:" />
+                <input required class="new-loc-rating" type="number" min="1" max="5" placeholder="1-5"/>
+                <button type="button" onclick="app.onCloseLocEditModal()">Cancel</button>
+                <button>Save</button>
+            </form>
+        </dialog>
     </main>
     <pre class="debug" hidden></pre>
     <div class="user-msg"></div>
