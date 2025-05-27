@@ -1,6 +1,9 @@
 # TravelTip
 #### The app that gets you somewhere
 
+## Authors
+- Max Choheli
+- Lioz Fried
 
 ## Description
 TravelTip is an app that keeps a list of favorite locations
@@ -51,7 +54,8 @@ export const locService = {
     save,
     setFilterBy,
     setSortBy,
-    getLocCountByRateMap
+    getLocCountByRateMap,
+    getLocCountByUpdateGroup
 }
 
 export const mapService = {
@@ -78,7 +82,9 @@ window.app = {
     onCopyLoc,
     onShareLoc,
     onSetSortBy,
-    onSetFilterBy
+    onSetFilterBy,
+    onSaveChanges,
+    onCloseLocEditModal
 }
 ```
 
