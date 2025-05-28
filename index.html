@@ -2,13 +2,25 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/main.css" />
     <title>TravelTip</title>
 </head>
 
 <body>
+    <section class="theme-settings">
+        <button onclick="toggleThemeMenu()">🎨 Customize Theme</button>
+        <div class="theme-menu" hidden>
+            <h2>Customize Theme</h2>
+            <label>
+                Background Color:
+                <input type="color" id="bgColorPicker">
+            </label>
+            <button onclick="onSaveTheme()">Save Theme</button>
+        </div>
+    </section>
+
     <header>
         <h1>TravelTip</h1>
         <section class="selected-loc">
@@ -21,10 +33,11 @@
         <form class="form-search" onsubmit="app.onSearchAddress(event)">
             <input type="text" name="address" placeholder="Search address" />
             <button title="Search">🔍</button>
-            <button type="button" title="My Position" onclick="app.onPanToUserPos()" class="btn-user-pos">&nbsp;
-            </button>
+            <button type="button" title="My Position" onclick="app.onPanToUserPos()"
+                class="btn-user-pos">&nbsp;</button>
         </form>
     </header>
+
     <main>
         <div class="map"></div>
         <div>
@@ -55,10 +68,13 @@
                         </label>
                     </p>
                 </section>
+
                 <h3>Locations</h3>
                 <ul class="loc-list"></ul>
+
                 <section class="loc-stats">
                     <h3>Statistics</h3>
+
                     <div class="loc-stats-rate">
                         <h4>By rate:</h4>
                         <div class="pie"></div>
@@ -73,18 +89,22 @@
                 </section>
             </section>
         </div>
+
         <dialog class="edit-loc-modal">
             <form onsubmit="app.onSaveChanges()" method="dialog">
                 <h2>Add Location</h2>
                 <input class="new-loc-name" type="text" placeholder="Location Name:" />
-                <input required class="new-loc-rating" type="number" min="1" max="5" placeholder="1-5"/>
+                <input required class="new-loc-rating" type="number" min="1" max="5" placeholder="1-5" />
                 <button type="button" onclick="app.onCloseLocEditModal()">Cancel</button>
                 <button>Save</button>
             </form>
         </dialog>
     </main>
+
     <pre class="debug" hidden></pre>
     <div class="user-msg"></div>
+
+    <script src="js/services/theme.service.js"></script>
     <script type="module" src="js/app.controller.js"></script>
 </body>
 

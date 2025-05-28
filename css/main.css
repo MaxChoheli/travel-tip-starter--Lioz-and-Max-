@@ -9,8 +9,22 @@
         display: flex;
         flex-direction: row-reverse;
     }
+
     .locs-container {
         width: 30vw;
     }
 }
 
+main {
+    display: flex;
+    align-items: stretch;
+}
+
+.map {
+    flex: 1;
+}
+
+.locs-container {
+    flex: 1;
+    box-sizing: border-box;
+}
